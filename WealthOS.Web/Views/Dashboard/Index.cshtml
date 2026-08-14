@@ -1,0 +1,111 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var d = Model.Dashboard;
+    var surplusClass = d.MonthlySurplus >= 0 ? "positive" : "negative";
+}
+
+<h1 class="page-title">This month's statement</h1>
+<p class="page-subtitle">@DateTime.UtcNow.ToString("MMMM yyyy") &middot; figures reset on the 1st of each month</p>
+
+<div class="grid grid-3">
+    <div class="card">
+        <p class="stat-label">Monthly income</p>
+        <p class="stat-value">@d.MonthlyIncome.ToString("N0")</p>
+    </div>
+    <div class="card">
+        <p class="stat-label">Monthly expenses</p>
+        <p class="stat-value">@d.MonthlyExpenses.ToString("N0")</p>
+    </div>
+    <div class="card">
+        <p class="stat-label">Surplus / deficit</p>
+        <p class="stat-value @surplusClass">@(d.MonthlySurplus >= 0 ? "+" : "-")@Math.Abs(d.MonthlySurplus).ToString("N0")</p>
+        <p class="stat-sub">Savings rate: @d.SavingsRatePercent.ToString("0.0")%</p>
+    </div>
+</div>
+
+<div class="grid grid-2" style="margin-top:20px;">
+    <div class="card">
+        <p class="stat-label">Net worth &amp; 12-month projection</p>
+        <p class="stat-value">@d.CurrentNetWorth.ToString("N0")</p>
+        @{
+            var points = d.Projection;
+            var maxVal = points.Count > 0 ? Math.Max(points.Max(p => p.ProjectedNetWorth), 1) : 1;
+            var minVal = points.Count > 0 ? Math.Min(points.Min(p => p.ProjectedNetWorth), 0) : 0;
+            var range = Math.Max(maxVal - minVal, 1);
+            var w = 560; var h = 160; var padding = 8;
+            string PointStr()
+            {
+                if (points.Count == 0) return "";
+                var xs = points.Select((p, i) => padding + i * (double)(w - 2 * padding) / Math.Max(points.Count - 1, 1));
+                var ys = points.Select(p => h - padding - (double)((p.ProjectedNetWorth - minVal) / range) * (h - 2 * padding));
+                return string.Join(" ", xs.Zip(ys, (x, y) => $"{x.ToString(System.Globalization.CultureInfo.InvariantCulture)},{y.ToString(System.Globalization.CultureInfo.InvariantCulture)}"));
+            }
+        }
+        <svg class="projection-chart" viewBox="0 0 @w @h" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Projected net worth over the next 12 months">
+            <polyline fill="none" stroke="#1f6f5c" stroke-width="2.5" points="@PointStr()" />
+        </svg>
+        <p class="stat-sub">Straight-line projection assuming this month's surplus repeats for 12 months.</p>
+    </div>
+
+    <div class="card">
+        <p class="stat-label">Goal</p>
+        @if (d.GoalName is not null)
+        {
+            <p class="stat-value" style="font-size:20px;">@d.GoalName</p>
+            <p class="stat-sub">Target: @d.GoalTargetAmount?.ToString("N0")</p>
+            <div class="progress-track"><div class="progress-fill" style="width:@d.GoalProgressPercent.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)%;"></div></div>
+            <p class="stat-sub">@d.GoalProgressPercent.ToString("0.0")% of the way there
+                @if (d.MonthsToGoal is int m)
+                {
+                    <text>&middot; @(m == 0 ? "goal reached" : $"~{m} months to go at this pace")</text>
+                }
+                else
+                {
+                    <text>&middot; not reachable at current pace &mdash; increase surplus</text>
+                }
+            </p>
+        }
+        else
+        {
+            <p class="stat-sub">You haven't set a financial goal yet.</p>
+            <a class="btn" asp-controller="Goal" asp-action="Index" style="margin-top:10px;">Set a goal</a>
+        }
+    </div>
+</div>
+
+<div class="card" style="margin-top:20px;">
+    <p class="stat-label">This week's tasks</p>
+    @if (d.ThisWeekTasks.Count == 0)
+    {
+        <p class="empty-state">No tasks generated yet for this week.</p>
+    }
+    else
+    {
+        <ul class="task-list">
+            @foreach (var t in d.ThisWeekTasks)
+            {
+                <li class="task-item @(t.IsCompleted ? "completed" : "")">
+                    <span class="badge @(t.Type == TaskType.IncreaseIncome ? "badge-gold" : t.Type == TaskType.ReduceExpenses ? "badge-brick" : "badge-emerald")">
+                        @(t.Type == TaskType.IncreaseIncome ? "Income" : t.Type == TaskType.ReduceExpenses ? "Expenses" : "Savings")
+                    </span>
+                    <div>
+                        <p class="task-title">
+                            @t.Title
+                            @if (t.Source == TaskSource.Ai)
+                            {
+                                <span class="badge badge-gold" style="margin-left:6px;font-weight:600;">AI coach</span>
+                            }
+                            else if (t.Source == TaskSource.Manual)
+                            {
+                                <span class="badge badge-emerald" style="margin-left:6px;font-weight:600;">Manual</span>
+                            }
+                        </p>
+                        <p class="task-desc">@t.Description</p>
+                    </div>
+                </li>
+            }
+        </ul>
+        <a asp-controller="WeeklyTask" asp-action="Index" style="font-size:13.5px;">Manage tasks &rarr;</a>
+    }
+</div>

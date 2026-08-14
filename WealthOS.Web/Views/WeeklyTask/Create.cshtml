@@ -1,0 +1,26 @@
+@model WeeklyTaskFormViewModel
+@{ ViewData["Title"] = "Add Task"; }
+
+<h1 class="page-title">Add a task</h1>
+<p class="page-subtitle">Add your own task for this week alongside the generated ones.</p>
+
+<div class="card" style="max-width:520px;">
+    <form asp-controller="WeeklyTask" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div class="field">
+            <label asp-for="Title">Title</label>
+            <input asp-for="Title" type="text" placeholder="e.g. Cancel unused gym membership" />
+            <span asp-validation-for="Title" class="validation-message"></span>
+        </div>
+        <div class="field">
+            <label asp-for="Description">Description (optional)</label>
+            <textarea asp-for="Description" rows="3"></textarea>
+        </div>
+        <div class="field">
+            <label asp-for="Type">Category</label>
+            <select asp-for="Type" asp-items="Html.GetEnumSelectList<TaskType>()"></select>
+        </div>
+        <button type="submit" class="btn">Add task</button>
+        <a asp-controller="WeeklyTask" asp-action="Index" class="btn btn-secondary" style="margin-left:8px;">Cancel</a>
+    </form>
+</div>

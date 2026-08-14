@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>WealthOS.Web</RootNamespace>
+    <UserSecretsId>wealthos-web-secrets</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WealthOS.Domain\WealthOS.Domain.csproj" />
+    <ProjectReference Include="..\WealthOS.Application\WealthOS.Application.csproj" />
+    <ProjectReference Include="..\WealthOS.Infrastructure\WealthOS.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

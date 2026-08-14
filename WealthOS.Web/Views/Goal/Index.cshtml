@@ -1,0 +1,33 @@
+@model GoalFormViewModel
+@{ ViewData["Title"] = "Goal"; }
+
+<h1 class="page-title">Financial goal</h1>
+<p class="page-subtitle">One active goal at a time &mdash; it drives your weekly task suggestions and dashboard projections.</p>
+
+<div class="card" style="max-width:520px;">
+    <form asp-controller="Goal" asp-action="Save" method="post">
+        @Html.AntiForgeryToken()
+        <div class="field">
+            <label asp-for="Name">Goal name</label>
+            <input asp-for="Name" type="text" placeholder="e.g. Emergency fund, House down payment" />
+            <span asp-validation-for="Name" class="validation-message"></span>
+        </div>
+        <div class="form-row">
+            <div class="field">
+                <label asp-for="TargetAmount">Target amount</label>
+                <input asp-for="TargetAmount" type="number" step="0.01" />
+                <span asp-validation-for="TargetAmount" class="validation-message"></span>
+            </div>
+            <div class="field">
+                <label asp-for="TargetDate">Target date</label>
+                <input asp-for="TargetDate" type="date" />
+            </div>
+        </div>
+        <div class="field">
+            <label asp-for="TargetSavingsRatePercent">Target savings rate (% of income)</label>
+            <input asp-for="TargetSavingsRatePercent" type="number" step="1" />
+            <span asp-validation-for="TargetSavingsRatePercent" class="validation-message"></span>
+        </div>
+        <button type="submit" class="btn">@(Model.Active is null ? "Set goal" : "Update goal")</button>
+    </form>
+</div>

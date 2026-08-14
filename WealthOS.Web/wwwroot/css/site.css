@@ -1,0 +1,233 @@
+/* ===========================================================
+   WealthOS — design tokens
+   Subject: a personal ledger/statement, not a generic SaaS panel.
+   Palette: paper + ink, with emerald for growth/surplus and
+   brick for deficit — the two states that matter most here.
+   Type: a serif for figures (statement feel, tabular numerals)
+   paired with a plain, quiet sans for everything else.
+   =========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --paper: #f7f4ee;
+  --paper-raised: #ffffff;
+  --ink: #1b2430;
+  --ink-muted: #5b6472;
+  --line: #e3ded2;
+  --emerald: #1f6f5c;
+  --emerald-soft: #e6efe9;
+  --gold: #b8860b;
+  --gold-soft: #f5edd6;
+  --brick: #a8412c;
+  --brick-soft: #f6e6e1;
+  --radius: 10px;
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+a { color: var(--emerald); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--emerald);
+  outline-offset: 2px;
+}
+
+/* ---------- topbar ---------- */
+.topbar {
+  background: var(--paper-raised);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.brand {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.brand:hover { text-decoration: none; }
+.nav { display: flex; gap: 22px; flex-wrap: wrap; }
+.nav a { color: var(--ink-muted); font-weight: 500; font-size: 14.5px; }
+.nav a:hover { color: var(--emerald); text-decoration: none; }
+
+/* ---------- layout blocks ---------- */
+main.container { padding-top: 32px; padding-bottom: 48px; }
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+.page-subtitle { color: var(--ink-muted); margin: 0 0 28px; font-size: 15px; }
+
+.card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+.card + .card { margin-top: 20px; }
+
+.grid { display: grid; gap: 18px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: 1.3fr 1fr; }
+@media (max-width: 860px) {
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ---------- statement / ledger figures ---------- */
+.stat-label {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin: 0 0 6px;
+}
+.stat-value {
+  font-family: var(--font-serif);
+  font-variant-numeric: tabular-nums;
+  font-size: 30px;
+  font-weight: 600;
+  margin: 0;
+}
+.stat-value.positive { color: var(--emerald); }
+.stat-value.negative { color: var(--brick); }
+.stat-sub { color: var(--ink-muted); font-size: 13px; margin-top: 6px; }
+
+.ledger {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.ledger th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  font-weight: 600;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.ledger td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14.5px;
+}
+.ledger tr:last-child td { border-bottom: none; }
+.ledger .amount { text-align: right; font-family: var(--font-serif); }
+.ledger .amount.income { color: var(--emerald); }
+.ledger .amount.expense { color: var(--brick); }
+
+/* ---------- badges / pills ---------- */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge-emerald { background: var(--emerald-soft); color: var(--emerald); }
+.badge-gold { background: var(--gold-soft); color: var(--gold); }
+.badge-brick { background: var(--brick-soft); color: var(--brick); }
+
+/* ---------- forms ---------- */
+label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+.field { margin-bottom: 16px; }
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-raised);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink);
+}
+textarea { resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+.validation-message { color: var(--brick); font-size: 12.5px; margin-top: 4px; display: block; }
+
+.btn {
+  display: inline-block;
+  background: var(--emerald);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { background: #185a4a; text-decoration: none; color: #fff; }
+.btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn-secondary:hover { background: var(--paper); color: var(--ink); }
+
+/* ---------- weekly tasks ---------- */
+.task-list { list-style: none; margin: 0; padding: 0; }
+.task-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.task-item:last-child { border-bottom: none; }
+.task-title { font-weight: 600; margin: 0 0 4px; }
+.task-desc { color: var(--ink-muted); font-size: 14px; margin: 0; }
+.task-item.completed .task-title { text-decoration: line-through; color: var(--ink-muted); }
+
+/* ---------- progress bar ---------- */
+.progress-track {
+  background: var(--line);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress-fill { background: var(--emerald); height: 100%; }
+
+/* ---------- projection chart (svg) ---------- */
+.projection-chart { width: 100%; height: auto; }
+
+.empty-state {
+  text-align: center;
+  color: var(--ink-muted);
+  padding: 32px 0;
+  font-size: 14.5px;
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 12.5px;
+  padding: 20px 0;
+  margin-top: 40px;
+}
