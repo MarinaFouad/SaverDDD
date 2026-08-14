@@ -3,12 +3,7 @@
 A personal finance app: log income/expenses/savings, set a financial goal, see your
 monthly surplus and savings rate, get weekly tasks to hit your goal faster, and view a
 dashboard with Net Worth + progress + a 12‑month projection.
-
-Built with **.NET 8**, **ASP.NET Core MVC**, and **Domain-Driven Design** layering.
-
-> ⚠️ This code was written without a .NET SDK or NuGet access in the sandbox that generated
-> it, so it has **not** been compiled or run yet. It's structurally complete and should build
-> cleanly, but run `dotnet build` first and fix anything your local SDK/NuGet feed flags.
+ 
 
 ## Architecture (DDD layers)
 
